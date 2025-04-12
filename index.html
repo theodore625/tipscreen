@@ -15,12 +15,20 @@
       height: 100vh;
     }
 
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* Vertically center the entire box */
+      align-items: center;
+      height: 70%; /* Take up most of the height, leaving space for title */
+    }
+
     .title {
       font-size: 28px;
       font-weight: bold;
       color: #333;
       text-align: center;
-      margin-bottom: 20px; /* Add some space between title and tip box */
+      margin-bottom: 10px; /* Space between title and tip box */
     }
 
     .tip-container {
@@ -72,18 +80,20 @@
 </head>
 <body>
 
-<div class="title">Would you like to leave a tip?</div>
+<div class="container">
+  <div class="title">Would you like to leave a tip?</div>
 
-<div class="tip-container" id="tipScreen">
-  <div class="tip-options">
-    <button class="tip-option" onclick="selectTip(0.15)">15%</button>
-    <button class="tip-option" onclick="selectTip(0.20)">20%</button>
-    <button class="tip-option" onclick="selectTip(0.30)">30%</button>
+  <div class="tip-container" id="tipScreen">
+    <div class="tip-options">
+      <button class="tip-option" onclick="selectTip(0.15)">15%</button>
+      <button class="tip-option" onclick="selectTip(0.20)">20%</button>
+      <button class="tip-option" onclick="selectTip(0.30)">30%</button>
+    </div>
+
+    <button class="no-tip" onclick="selectTip(0)">No Tip</button>
+
+    <div class="thank-you" id="thankYouMsg"></div>
   </div>
-
-  <button class="no-tip" onclick="selectTip(0)">No Tip</button>
-
-  <div class="thank-you" id="thankYouMsg"></div>
 </div>
 
 <script>
