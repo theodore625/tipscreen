@@ -24,20 +24,20 @@
       height: 70%;
     }
 
+    .amount {
+      font-size: 36px;
+      font-weight: bold;
+      color: #007aff;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
     .title {
       font-size: 28px;
       font-weight: bold;
       color: #333;
       text-align: center;
       margin-bottom: 10px;
-    }
-
-    .amount {
-      font-size: 24px;
-      color: #007aff;
-      margin-bottom: 10px;
-      cursor: pointer;
-      user-select: none;
     }
 
     .tip-container {
@@ -140,32 +140,21 @@
       cursor: not-allowed;
       user-select: none;
     }
-
-    .amount-input {
-      font-size: 24px;
-      color: #007aff;
-      text-align: center;
-      border: none;
-      outline: none;
-      background: none;
-      width: 100px;
-    }
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="title">Would you like to leave a tip?</div>
-
   <div class="amount" id="amountDisplay" onclick="makeEditable()">$0</div>
+  <div class="title">Would you like to leave a tip?</div>
 
   <div class="tip-container" id="tipScreen">
     <div class="tip-options">
-      <button class="tip-option" onclick="handleTip(true)">15%</button>
-      <button class="tip-option" onclick="handleTip(true)">20%</button>
-      <button class="tip-option" onclick="handleTip(true)">30%</button>
+      <button class="tip-option" onclick="handleTip(15)">15%</button>
+      <button class="tip-option" onclick="handleTip(20)">20%</button>
+      <button class="tip-option" onclick="handleTip(30)">30%</button>
     </div>
 
-    <button class="no-tip" onclick="handleTip(false)">No Tip</button>
+    <button class="no-tip" onclick="handleTip(0)">No Tip</button>
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
@@ -195,20 +184,31 @@
 </div>
 
 <script>
-  function handleTip(tipped) {
-    const msg = document.getElementById("thankYouMsg");
-    const receiptOptions = document.getElementById("receiptOptions");
+  let currentAmount = 0;
 
-    msg.style.display = "none";
-    document.getElementById("confettiContainer").style.display = "none";
-    document.getElementById("emailForm").style.display = "none";
+  function handleTip(percentage) {
+    if (percentage === 0) {
+      document.getElementById("thankYouMsg").textContent = "Maybe next time 😊";
+      document.getElementById("thankYouMsg").style.display = "block";
+      return; // Do not show receipt options if no tip
+    }
 
-    if (!tipped) {
-      msg.textContent = "Maybe next time 😊";
-      msg.style.display = "block";
-      return;
-    } else {
-      receiptOptions.style.display = "flex";
+    currentAmount = 24; // This is a static amount for now; it can be dynamically set as needed
+    const tipAmount = (currentAmount * percentage) / 100;
+    const totalAmount = currentAmount + tipAmount;
+    
+    document.getElementById("amountDisplay").textContent = `$${totalAmount.toFixed(2)}`;
+    
+    document.getElementById("receiptOptions").style.display = "flex";
+  }
+
+  function makeEditable() {
+    const amountDisplay = document.getElementById("amountDisplay");
+    const currentAmount = parseFloat(amountDisplay.textContent.replace('$', ''));
+    
+    const newAmount = prompt("Enter the amount:", currentAmount);
+    if (newAmount != null && !isNaN(newAmount)) {
+      amountDisplay.textContent = `$${parseFloat(newAmount).toFixed(2)}`;
     }
   }
 
@@ -218,25 +218,19 @@
   }
 
   function processReceipt(type) {
-    document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
-    document.getElementById("thankYouMsg").style.display = "block";
-    document.getElementById("confettiContainer").style.display = "flex";
-    document.getElementById("receiptOptions").style.display = "none";
-    document.getElementById("emailForm").style.display = "none";
-  }
+    const receiptOptions = document.getElementById("receiptOptions");
+    const emailForm = document.getElementById("emailForm");
 
-  function makeEditable() {
-    const amountDisplay = document.getElementById("amountDisplay");
-    const currentValue = amountDisplay.textContent.replace('$', '');
-    amountDisplay.innerHTML = `<input id="amountInput" class="amount-input" value="${currentValue}" onblur="saveAmount()">`;
-    document.getElementById("amountInput").focus();
-  }
-
-  function saveAmount() {
-    const input = document.getElementById("amountInput");
-    let value = input.value.replace(/[^\d.]/g, '');
-    if (!value) value = "0";
-    document.getElementById("amountDisplay").textContent = `$${value}`;
+    // Simulate a delay before showing transaction complete
+    setTimeout(() => {
+      document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
+      document.getElementById("thankYouMsg").style.display = "block";
+      document.getElementById("confettiContainer").style.display = "flex";
+      
+      // Hide the receipt options and email form
+      receiptOptions.style.display = "none";
+      emailForm.style.display = "none";
+    }, 2000);
   }
 </script>
 </body>
