@@ -7,71 +7,75 @@
   <style>
     :root {
       --blue: #007aff;
-      --gray: #f2f2f7;
+      --background: #f2f2f7;
+      --text-dark: #000000;
+      --text-light: #666666;
     }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
-      background-color: var(--gray);
+      padding: 0;
+      background-color: var(--background);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
     }
 
     .screen {
       background-color: #ffffff;
       width: 100%;
-      max-width: 480px;
-      padding: 40px 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.1);
-      border-radius: 20px;
+      max-width: 520px;
+      padding: 60px 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      border-radius: 28px;
       text-align: center;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-      color: #000;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-dark);
     }
 
     .subtitle {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 30px;
+      font-size: 20px;
+      color: var(--text-light);
+      margin-bottom: 50px;
     }
 
     .tip-buttons {
       display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
+      flex-direction: column;
+      gap: 30px;
+      margin-bottom: 40px;
     }
 
     .tip-button {
-      background-color: #f0f0f5;
-      border: 2px solid transparent;
-      border-radius: 12px;
-      font-size: 20px;
-      padding: 18px 24px;
-      min-width: 100px;
+      background-color: var(--blue);
+      color: white;
+      font-size: 24px;
       font-weight: 600;
-      color: #000;
+      padding: 25px;
+      border: none;
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background-color 0.2s ease;
+      width: 100%;
     }
 
     .tip-button:hover {
-      border-color: var(--blue);
+      background-color: #005ecb;
     }
 
     .no-tip {
       background: none;
       border: none;
       color: var(--blue);
-      font-size: 17px;
+      font-size: 20px;
+      font-weight: 500;
       text-decoration: underline;
       cursor: pointer;
     }
@@ -80,13 +84,14 @@
       display: none;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
 
     .confetti {
-      font-size: 36px;
-      margin-top: 20px;
-      animation: bounce 1s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.15s);
+      font-size: 40px;
+      margin-top: 30px;
+      animation: bounce 1s infinite ease-in-out;
+      animation-delay: calc(var(--i) * 0.2s);
     }
 
     @keyframes bounce {
@@ -98,7 +103,7 @@
 <body>
   <div class="screen" id="tip-screen">
     <h1>Leave a Tip?</h1>
-    <div class="subtitle">Tips go to your barista 💁‍♂️</div>
+    <div class="subtitle">Your support means everything 💖</div>
     <div class="tip-buttons">
       <button class="tip-button" onclick="showThankYou()">$1.00</button>
       <button class="tip-button" onclick="showThankYou()">$2.00</button>
@@ -107,13 +112,13 @@
     <button class="no-tip" onclick="showThankYou()">No Tip</button>
   </div>
 
-  <div class="screen thank-you-screen" id="thank-you-screen">
+  <div class="screen thank-you-screen" id="thank-you-screen" style="display: none;">
     <h1>Thank you for your support!</h1>
     <div>
-      <span class="confetti" style="--i:1;">🎉</span>
-      <span class="confetti" style="--i:2;">🎊</span>
-      <span class="confetti" style="--i:3;">🎉</span>
-      <span class="confetti" style="--i:4;">🎊</span>
+      <span class="confetti" style="--i:1">🎉</span>
+      <span class="confetti" style="--i:2">🎊</span>
+      <span class="confetti" style="--i:3">🎉</span>
+      <span class="confetti" style="--i:4">🎊</span>
     </div>
   </div>
 
