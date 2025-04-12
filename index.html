@@ -88,15 +88,6 @@
       display: none;
       justify-content: center;
       align-items: center;
-      text-align: center;
-    }
-
-    .confetti-message {
-      position: absolute;
-      font-size: 32px;
-      font-weight: bold;
-      color: white;
-      z-index: 10; /* Ensures text is above the confetti */
     }
 
     .confetti-gif {
@@ -126,7 +117,6 @@
   <!-- Confetti Container -->
   <div class="confetti-container" id="confettiContainer">
     <img class="confetti-gif" src="confetti.gif" alt="Confetti GIF">
-    <div class="confetti-message" id="confettiMessage">Thanks for the tip!</div>
   </div>
 </div>
 
@@ -134,18 +124,21 @@
   function selectTip(percent) {
     const msg = document.getElementById("thankYouMsg");
     const confettiContainer = document.getElementById("confettiContainer");
-    const confettiMessage = document.getElementById("confettiMessage");
 
     if (percent === 0) {
-      msg.textContent = "No worries! Maybe next time. 😊";
+      msg.textContent = "Maybe next time 😊";
       msg.style.display = "block";
       confettiContainer.style.display = "none"; // Hide confetti if "No Tip"
     } else {
-      msg.style.display = "none"; // Hide the "Maybe next time" message
+      msg.textContent = `Thanks for the tip! 💖`;
+      msg.style.display = "block"; // Show the "Thanks for the tip!" message
       confettiContainer.style.display = "flex"; // Show the confetti
     }
   }
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
