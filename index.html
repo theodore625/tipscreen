@@ -186,6 +186,7 @@
     if (!tipped) {
       msg.textContent = "Maybe next time 😊";
       msg.style.display = "block";
+      return; // Do not show receipt options if no tip
     } else {
       receiptOptions.style.display = "flex";
     }
