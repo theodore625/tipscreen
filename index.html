@@ -1,132 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Leave a Tip</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tip of the Day</title>
   <style>
-    :root {
-      --blue: #007aff;
-      --background: #f2f2f7;
-      --text-dark: #000000;
-      --text-light: #666666;
-    }
-
     body {
       margin: 0;
-      padding: 0;
-      background-color: var(--background);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #d4d0c8;
     }
 
-    .screen {
-      background-color: #ffffff;
-      width: 100%;
-      max-width: 520px;
-      padding: 60px 30px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-      border-radius: 28px;
-      text-align: center;
+    .window {
+      width: 450px;
+      margin: 100px auto;
+      border: 2px solid #000;
+      background-color: #fff;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
     }
 
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: var(--text-dark);
-    }
-
-    .subtitle {
-      font-size: 20px;
-      color: var(--text-light);
-      margin-bottom: 50px;
-    }
-
-    .tip-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      margin-bottom: 40px;
-    }
-
-    .tip-button {
-      background-color: var(--blue);
+    .title-bar {
+      background-color: #0a246a;
       color: white;
-      font-size: 24px;
-      font-weight: 600;
-      padding: 25px;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      width: 100%;
-    }
-
-    .tip-button:hover {
-      background-color: #005ecb;
-    }
-
-    .no-tip {
-      background: none;
-      border: none;
-      color: var(--blue);
-      font-size: 20px;
-      font-weight: 500;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .thank-you-screen {
-      display: none;
-      flex-direction: column;
+      padding: 4px 8px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
     }
 
-    .confetti {
-      font-size: 40px;
-      margin-top: 30px;
-      animation: bounce 1s infinite ease-in-out;
-      animation-delay: calc(var(--i) * 0.2s);
+    .title-bar button {
+      background: #c0c0c0;
+      border: 1px solid #808080;
+      padding: 0 6px;
+      cursor: pointer;
+      font-weight: bold;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .content {
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .content img {
+      margin-right: 10px;
+    }
+
+    .content-text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 16px;
+      gap: 10px;
+    }
+
+    button {
+      font-size: 13px;
+      padding: 4px 12px;
+      background-color: #e0e0e0;
+      border: 1px solid #808080;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="screen" id="tip-screen">
-    <h1>Leave a Tip?</h1>
-    <div class="subtitle">Your support means everything 💖</div>
-    <div class="tip-buttons">
-      <button class="tip-button" onclick="showThankYou()">$1.00</button>
-      <button class="tip-button" onclick="showThankYou()">$2.00</button>
-      <button class="tip-button" onclick="showThankYou()">$5.00</button>
-    </div>
-    <button class="no-tip" onclick="showThankYou()">No Tip</button>
-  </div>
 
-  <div class="screen thank-you-screen" id="thank-you-screen" style="display: none;">
-    <h1>Thank you for your support!</h1>
-    <div>
-      <span class="confetti" style="--i:1">🎉</span>
-      <span class="confetti" style="--i:2">🎊</span>
-      <span class="confetti" style="--i:3">🎉</span>
-      <span class="confetti" style="--i:4">🎊</span>
+<div class="window" id="tipWindow">
+  <div class="title-bar">
+    <span>Tip of the Day</span>
+    <button onclick="closeTip()">X</button>
+  </div>
+  <div class="content">
+    <img src="https://i.imgur.com/7gN5rEo.png" alt="Tip Icon" width="32" height="32">
+    <div class="content-text">
+      Did you know you can hold down the Shift key to select multiple files at once?
     </div>
   </div>
+  <div class="checkbox">
+    <input type="checkbox" id="dontShow" />
+    <label for="dontShow">&nbsp;Don't show tips at startup</label>
+  </div>
+  <div class="actions">
+    <button onclick="showAnotherTip()">Tip</button>
+    <button onclick="setDontShow()">Don't Show Again</button>
+    <button onclick="closeTip()">Close</button>
+  </div>
+</div>
 
-  <script>
-    function showThankYou() {
-      document.getElementById("tip-screen").style.display = "none";
-      document.getElementById("thank-you-screen").style.display = "flex";
-    }
-  </script>
+<script>
+  function closeTip() {
+    document.getElementById('tipWindow').style.display = 'none';
+  }
+
+  function showAnotherTip() {
+    alert("Here's another tip:\nYou can press Ctrl + Z to undo your last action.");
+  }
+
+  function setDontShow() {
+    const checkbox = document.getElementById('dontShow');
+    checkbox.checked = true;
+    alert("Tips will no longer show at startup.");
+  }
+</script>
+
 </body>
 </html>
