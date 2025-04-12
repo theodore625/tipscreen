@@ -232,6 +232,8 @@
     amountInput.removeAttribute("readonly");
     amountInput.focus();
     amountInput.select();
+    amountInput.setAttribute('type', 'number');
+    
     amountInput.onblur = function() {
       amountInput.setAttribute("readonly", true);
       const newAmount = parseFloat(amountInput.value.replace('$', ''));
