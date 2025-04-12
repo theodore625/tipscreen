@@ -5,121 +5,122 @@
   <title>Leave a Tip</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+    :root {
+      --blue: #007aff;
+      --gray: #f2f2f7;
     }
 
-    .container, .thank-you {
-      background: white;
-      padding: 30px 20px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      max-width: 400px;
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
+      background-color: var(--gray);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .screen {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.1);
+      border-radius: 20px;
       text-align: center;
-      transition: opacity 0.4s ease;
     }
 
     h1 {
+      font-size: 24px;
       margin-bottom: 10px;
-      font-size: 28px;
+      color: #000;
     }
 
-    p {
+    .subtitle {
+      font-size: 16px;
       color: #666;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
 
-    .tip-options {
+    .tip-buttons {
       display: flex;
-      justify-content: space-around;
-      margin-bottom: 25px;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
     }
 
     .tip-button {
-      background-color: #007aff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 15px 25px;
-      font-size: 18px;
+      background-color: #f0f0f5;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      font-size: 20px;
+      padding: 18px 24px;
+      min-width: 100px;
+      font-weight: 600;
+      color: #000;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: all 0.2s ease;
     }
 
     .tip-button:hover {
-      background-color: #005ecb;
+      border-color: var(--blue);
     }
 
-    .no-thanks {
+    .no-tip {
       background: none;
       border: none;
-      color: #007aff;
-      font-size: 16px;
-      cursor: pointer;
+      color: var(--blue);
+      font-size: 17px;
       text-decoration: underline;
+      cursor: pointer;
     }
 
-    .thank-you {
+    .thank-you-screen {
       display: none;
       flex-direction: column;
+      align-items: center;
     }
 
     .confetti {
-      font-size: 40px;
-      animation: float 1s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.1s);
-      position: relative;
-      display: inline-block;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0); opacity: 1; }
-      50% { transform: translateY(-10px); opacity: 0.7; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    .confetti-container {
+      font-size: 36px;
       margin-top: 20px;
+      animation: bounce 1s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.15s);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
 <body>
-  <div class="container" id="tip-screen">
-    <h1>Would you like to leave a tip?</h1>
-    <p>Your support means a lot!</p>
-    <div class="tip-options">
-      <button class="tip-button" onclick="showThankYou()">$1</button>
-      <button class="tip-button" onclick="showThankYou()">$2</button>
-      <button class="tip-button" onclick="showThankYou()">$5</button>
+  <div class="screen" id="tip-screen">
+    <h1>Leave a Tip?</h1>
+    <div class="subtitle">Tips go to your barista 💁‍♂️</div>
+    <div class="tip-buttons">
+      <button class="tip-button" onclick="showThankYou()">$1.00</button>
+      <button class="tip-button" onclick="showThankYou()">$2.00</button>
+      <button class="tip-button" onclick="showThankYou()">$5.00</button>
     </div>
-    <button class="no-thanks" onclick="showThankYou()">No, Thanks</button>
+    <button class="no-tip" onclick="showThankYou()">No Tip</button>
   </div>
 
-  <div class="thank-you" id="thank-you-screen">
-    <h1>Thank you for your support! 💖</h1>
-    <div class="confetti-container">
-      <span class="confetti" style="--i:1">🎉</span>
-      <span class="confetti" style="--i:2">🎊</span>
-      <span class="confetti" style="--i:3">🎉</span>
-      <span class="confetti" style="--i:4">🎊</span>
-      <span class="confetti" style="--i:5">🎉</span>
+  <div class="screen thank-you-screen" id="thank-you-screen">
+    <h1>Thank you for your support!</h1>
+    <div>
+      <span class="confetti" style="--i:1;">🎉</span>
+      <span class="confetti" style="--i:2;">🎊</span>
+      <span class="confetti" style="--i:3;">🎉</span>
+      <span class="confetti" style="--i:4;">🎊</span>
     </div>
   </div>
 
   <script>
     function showThankYou() {
-      document.getElementById('tip-screen').style.display = 'none';
-      const thankYou = document.getElementById('thank-you-screen');
-      thankYou.style.display = 'flex';
+      document.getElementById("tip-screen").style.display = "none";
+      document.getElementById("thank-you-screen").style.display = "flex";
     }
   </script>
 </body>
