@@ -6,9 +6,8 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background-color: #f1f1f1;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,88 +15,91 @@
     }
 
     .tip-container {
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      width: 420px;
-      padding: 30px;
+      width: 400px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
     .tip-container h2 {
-      margin: 0 0 15px;
+      margin-bottom: 20px;
       font-size: 24px;
       color: #333;
     }
 
-    .tip-container p {
-      font-size: 16px;
-      margin-bottom: 25px;
-      color: #555;
-    }
-
-    .tip-buttons {
+    .tip-options {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
 
-    .tip-button {
-      background-color: #e0e0e0;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 16px;
+    .tip-option {
+      flex: 1;
+      padding: 20px 0;
+      background-color: #f2f2f2;
+      border: 2px solid #ccc;
+      margin: 0 5px;
+      font-size: 18px;
       cursor: pointer;
-      transition: 0.2s ease;
+      user-select: none;
+      transition: background-color 0.2s;
     }
 
-    .tip-button:hover {
-      background-color: #4caf50;
+    .tip-option:hover {
+      background-color: #e0e0e0;
+    }
+
+    .no-tip {
+      width: 100%;
+      padding: 20px 0;
+      background-color: #007aff;
       color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+
+    .no-tip:hover {
+      background-color: #005bb5;
     }
 
     .thank-you {
       display: none;
-      font-size: 20px;
+      font-size: 18px;
       margin-top: 20px;
-      color: #4caf50;
+      color: #28a745;
     }
   </style>
 </head>
 <body>
 
 <div class="tip-container" id="tipScreen">
-  <h2>Leave a Tip?</h2>
-  <p>Your barista would really appreciate it!</p>
-  <div class="tip-buttons">
-    <button class="tip-button" onclick="selectTip(0)">No Tip</button>
-    <button class="tip-button" onclick="selectTip(0.15)">15%</button>
-    <button class="tip-button" onclick="selectTip(0.20)">20%</button>
-    <button class="tip-button" onclick="customTip()">Custom</button>
+  <h2>Would you like to leave a tip?</h2>
+
+  <div class="tip-options">
+    <div class="tip-option" onclick="selectTip(0.15)">15%</div>
+    <div class="tip-option" onclick="selectTip(0.20)">20%</div>
+    <div class="tip-option" onclick="selectTip(0.30)">30%</div>
   </div>
-  <div class="thank-you" id="thankYouMsg">Thanks for your tip! 💖</div>
+
+  <button class="no-tip" onclick="selectTip(0)">No Tip</button>
+
+  <div class="thank-you" id="thankYouMsg"></div>
 </div>
 
 <script>
   function selectTip(percent) {
+    const msg = document.getElementById("thankYouMsg");
     if (percent === 0) {
-      document.getElementById("thankYouMsg").innerText = "Maybe next time! 😊";
+      msg.textContent = "No worries! Maybe next time. 😊";
     } else {
-      document.getElementById("thankYouMsg").innerText = `Thanks for tipping ${Math.round(percent * 100)}%! 💖`;
+      msg.textContent = `Thank you for tipping ${Math.round(percent * 100)}%! 💖`;
     }
-    document.getElementById("thankYouMsg").style.display = "block";
-  }
-
-  function customTip() {
-    let amount = prompt("Enter custom tip amount ($):");
-    if (amount && !isNaN(amount) && Number(amount) > 0) {
-      document.getElementById("thankYouMsg").innerText = `Thanks for tipping $${parseFloat(amount).toFixed(2)}! 💖`;
-      document.getElementById("thankYouMsg").style.display = "block";
-    } else {
-      alert("Please enter a valid amount.");
-    }
+    msg.style.display = "block";
   }
 </script>
 
