@@ -116,6 +116,22 @@
       padding: 8px;
       width: 100%;
     }
+
+    .fake-pay-buttons {
+      position: fixed;
+      bottom: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .fake-pay-buttons img {
+      height: 40px;
+      opacity: 0.7;
+      cursor: not-allowed;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +168,10 @@
   <div class="confetti-container" id="confettiContainer">
     <img class="confetti-gif" src="confetti.gif" alt="Confetti GIF">
   </div>
+</div>
+
+<div class="fake-pay-buttons">
+  <img src="applepay-googlepay.png" alt="Apple Pay and Google Pay">
 </div>
 
 <script>
