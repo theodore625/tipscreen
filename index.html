@@ -166,7 +166,7 @@
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
-      <button class="receipt-btn" onclick="completeTransaction()">No Receipt</button>
+      <button class="receipt-btn" onclick="processReceipt('no')">No Receipt</button>
       <button class="receipt-btn" onclick="showEmailForm()">Email Receipt</button>
     </div>
 
@@ -176,7 +176,7 @@
         <span>@</span>
         <input type="text" placeholder="domain.com" id="emailDomain" />
       </div>
-      <button class="submit-email-btn" onclick="completeTransaction()">Submit</button>
+      <button class="submit-email-btn" onclick="processReceipt('email')">Submit</button>
     </div>
 
     <div class="thank-you" id="thankYouMsg"></div>
@@ -208,15 +208,6 @@
     } else {
       receiptOptions.style.display = "flex";
     }
-
-    // Show loading spinner
-    spinner.style.display = "block";
-    
-    // Simulate loading by waiting for 2 seconds
-    setTimeout(() => {
-      spinner.style.display = "none"; // Hide spinner
-      completeTransaction(); // Complete transaction
-    }, 2000);
   }
 
   function showEmailForm() {
@@ -224,12 +215,31 @@
     document.getElementById("emailForm").style.display = "flex";
   }
 
-  function completeTransaction() {
-    document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
-    document.getElementById("thankYouMsg").style.display = "block";
-    document.getElementById("confettiContainer").style.display = "flex";
-    document.getElementById("receiptOptions").style.display = "none";
-    document.getElementById("emailForm").style.display = "none";
+  function processReceipt(type) {
+    const spinner = document.getElementById("spinner");
+    const receiptOptions = document.getElementById("receiptOptions");
+    const emailForm = document.getElementById("emailForm");
+
+    // Show spinner
+    spinner.style.display = "block";
+    
+    // Simulate loading by waiting for 2 seconds
+    setTimeout(() => {
+      // Hide spinner and complete transaction
+      spinner.style.display = "none";
+
+      if (type === 'email') {
+        // You could handle email receipt here, but it's faked for now
+      }
+
+      document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
+      document.getElementById("thankYouMsg").style.display = "block";
+      document.getElementById("confettiContainer").style.display = "flex";
+      
+      // Hide the receipt options and email form
+      receiptOptions.style.display = "none";
+      emailForm.style.display = "none";
+    }, 2000);
   }
 </script>
 </body>
