@@ -132,6 +132,23 @@
       cursor: not-allowed;
       user-select: none;
     }
+
+    /* Fake loading spinner */
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -163,6 +180,7 @@
     </div>
 
     <div class="thank-you" id="thankYouMsg"></div>
+    <div class="spinner" id="spinner"></div>
   </div>
 
   <div class="confetti-container" id="confettiContainer">
@@ -178,6 +196,7 @@
   function handleTip(tipped) {
     const msg = document.getElementById("thankYouMsg");
     const receiptOptions = document.getElementById("receiptOptions");
+    const spinner = document.getElementById("spinner");
 
     msg.style.display = "none";
     document.getElementById("confettiContainer").style.display = "none";
@@ -189,6 +208,15 @@
     } else {
       receiptOptions.style.display = "flex";
     }
+
+    // Show loading spinner
+    spinner.style.display = "block";
+    
+    // Simulate loading by waiting for 2 seconds
+    setTimeout(() => {
+      spinner.style.display = "none"; // Hide spinner
+      completeTransaction(); // Complete transaction
+    }, 2000);
   }
 
   function showEmailForm() {
