@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Leave a Tip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .tip-options {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 25px;
+    }
+
+    .tip-button {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 25px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .tip-button:hover {
+      background-color: #005ecb;
+    }
+
+    .no-thanks {
+      background: none;
+      border: none;
+      color: #007aff;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Would you like to leave a tip?</h1>
+    <p>Your support means a lot!</p>
+    <div class="tip-options">
+      <button class="tip-button">$1</button>
+      <button class="tip-button">$2</button>
+      <button class="tip-button">$5</button>
+    </div>
+    <button class="no-thanks">No, Thanks</button>
+  </div>
+</body>
+</html>
