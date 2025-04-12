@@ -140,11 +140,36 @@
       cursor: not-allowed;
       user-select: none;
     }
+
+    .amount-input {
+      font-size: 36px;
+      font-weight: bold;
+      color: #007aff;
+      text-align: center;
+      margin-bottom: 10px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: center;
+      display: inline-block;
+    }
+
+    input[type="number"] {
+      font-size: 36px;
+      font-weight: bold;
+      color: #007aff;
+      text-align: center;
+      margin-bottom: 10px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="amount" id="amountDisplay" onclick="makeEditable()">$0</div>
+  <input class="amount-input" id="amountDisplay" value="$0" readonly onclick="makeEditable()">
   <div class="title">Would you like to leave a tip?</div>
 
   <div class="tip-container" id="tipScreen">
@@ -197,19 +222,26 @@
     const tipAmount = (currentAmount * percentage) / 100;
     const totalAmount = currentAmount + tipAmount;
     
-    document.getElementById("amountDisplay").textContent = `$${totalAmount.toFixed(2)}`;
+    document.getElementById("amountDisplay").value = `$${totalAmount.toFixed(2)}`;
     
     document.getElementById("receiptOptions").style.display = "flex";
   }
 
   function makeEditable() {
-    const amountDisplay = document.getElementById("amountDisplay");
-    const currentAmount = parseFloat(amountDisplay.textContent.replace('$', ''));
-    
-    const newAmount = prompt("Enter the amount:", currentAmount);
-    if (newAmount != null && !isNaN(newAmount)) {
-      amountDisplay.textContent = `$${parseFloat(newAmount).toFixed(2)}`;
-    }
+    const amountInput = document.getElementById("amountDisplay");
+    amountInput.removeAttribute("readonly");
+    amountInput.focus();
+    amountInput.select();
+    amountInput.onblur = function() {
+      amountInput.setAttribute("readonly", true);
+      const newAmount = parseFloat(amountInput.value.replace('$', ''));
+      if (!isNaN(newAmount)) {
+        currentAmount = newAmount;
+        amountInput.value = `$${newAmount.toFixed(2)}`;
+      } else {
+        amountInput.value = `$${currentAmount.toFixed(2)}`;
+      }
+    };
   }
 
   function showEmailForm() {
