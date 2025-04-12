@@ -1,117 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tip of the Day</title>
+  <meta charset="UTF-8">
+  <title>Tip Screen</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #d4d0c8;
-    }
-
-    .window {
-      width: 450px;
-      margin: 100px auto;
-      border: 2px solid #000;
-      background-color: #fff;
-      box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .title-bar {
-      background-color: #0a246a;
-      color: white;
-      padding: 4px 8px;
-      font-weight: bold;
+      padding: 0;
+      background-color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
-    .title-bar button {
-      background: #c0c0c0;
-      border: 1px solid #808080;
-      padding: 0 6px;
-      cursor: pointer;
-      font-weight: bold;
+    .tip-container {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 420px;
+      padding: 30px;
+      text-align: center;
     }
 
-    .content {
-      padding: 16px;
+    .tip-container h2 {
+      margin: 0 0 15px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .tip-container p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .tip-buttons {
       display: flex;
-      align-items: flex-start;
-    }
-
-    .content img {
-      margin-right: 10px;
-    }
-
-    .content-text {
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .checkbox {
-      display: flex;
-      align-items: center;
-      font-size: 13px;
-      margin-top: 10px;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 16px;
       gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    button {
-      font-size: 13px;
-      padding: 4px 12px;
+    .tip-button {
       background-color: #e0e0e0;
-      border: 1px solid #808080;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
       cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tip-button:hover {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .thank-you {
+      display: none;
+      font-size: 20px;
+      margin-top: 20px;
+      color: #4caf50;
     }
   </style>
 </head>
 <body>
 
-<div class="window" id="tipWindow">
-  <div class="title-bar">
-    <span>Tip of the Day</span>
-    <button onclick="closeTip()">X</button>
+<div class="tip-container" id="tipScreen">
+  <h2>Leave a Tip?</h2>
+  <p>Your barista would really appreciate it!</p>
+  <div class="tip-buttons">
+    <button class="tip-button" onclick="selectTip(0)">No Tip</button>
+    <button class="tip-button" onclick="selectTip(0.15)">15%</button>
+    <button class="tip-button" onclick="selectTip(0.20)">20%</button>
+    <button class="tip-button" onclick="customTip()">Custom</button>
   </div>
-  <div class="content">
-    <img src="https://i.imgur.com/7gN5rEo.png" alt="Tip Icon" width="32" height="32">
-    <div class="content-text">
-      Did you know you can hold down the Shift key to select multiple files at once?
-    </div>
-  </div>
-  <div class="checkbox">
-    <input type="checkbox" id="dontShow" />
-    <label for="dontShow">&nbsp;Don't show tips at startup</label>
-  </div>
-  <div class="actions">
-    <button onclick="showAnotherTip()">Tip</button>
-    <button onclick="setDontShow()">Don't Show Again</button>
-    <button onclick="closeTip()">Close</button>
-  </div>
+  <div class="thank-you" id="thankYouMsg">Thanks for your tip! 💖</div>
 </div>
 
 <script>
-  function closeTip() {
-    document.getElementById('tipWindow').style.display = 'none';
+  function selectTip(percent) {
+    if (percent === 0) {
+      document.getElementById("thankYouMsg").innerText = "Maybe next time! 😊";
+    } else {
+      document.getElementById("thankYouMsg").innerText = `Thanks for tipping ${Math.round(percent * 100)}%! 💖`;
+    }
+    document.getElementById("thankYouMsg").style.display = "block";
   }
 
-  function showAnotherTip() {
-    alert("Here's another tip:\nYou can press Ctrl + Z to undo your last action.");
-  }
-
-  function setDontShow() {
-    const checkbox = document.getElementById('dontShow');
-    checkbox.checked = true;
-    alert("Tips will no longer show at startup.");
+  function customTip() {
+    let amount = prompt("Enter custom tip amount ($):");
+    if (amount && !isNaN(amount) && Number(amount) > 0) {
+      document.getElementById("thankYouMsg").innerText = `Thanks for tipping $${parseFloat(amount).toFixed(2)}! 💖`;
+      document.getElementById("thankYouMsg").style.display = "block";
+    } else {
+      alert("Please enter a valid amount.");
+    }
   }
 </script>
 
