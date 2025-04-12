@@ -21,14 +21,14 @@
       font-weight: bold;
     }
 
-    #customAmount {
+    #tipAmountDisplay {
       color: blue;
       font-size: 24px;
       margin: 15px 0;
       cursor: pointer;
     }
 
-    #customAmountInput {
+    #tipAmountInput {
       font-size: 24px;
       text-align: center;
       color: blue;
@@ -36,6 +36,7 @@
       border: none;
       border-bottom: 2px solid blue;
       outline: none;
+      display: none;
     }
 
     #tipBox {
@@ -122,9 +123,9 @@
 <body>
   <div id="leaveTipText">Leave a Tip</div>
 
-  <!-- Editable amount -->
-  <div id="customAmount" onclick="editAmount()">0$</div>
-  <input type="number" id="customAmountInput" onblur="saveAmount()" onkeydown="if(event.key==='Enter')saveAmount()" style="display:none;" />
+  <!-- Editable tip amount display -->
+  <div id="tipAmountDisplay" onclick="editTipAmount()">0</div>
+  <input type="number" id="tipAmountInput" onblur="saveTipAmount()" onkeydown="if(event.key==='Enter')saveTipAmount()" />
 
   <div id="tipBox">
     <div class="tip-options">
@@ -180,30 +181,28 @@
       document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
     }
 
-    function editAmount() {
-      const display = document.getElementById("customAmount");
-      const input = document.getElementById("customAmountInput");
+    function editTipAmount() {
+      const display = document.getElementById("tipAmountDisplay");
+      const input = document.getElementById("tipAmountInput");
 
-      input.value = parseFloat(display.textContent);
+      input.value = parseFloat(display.textContent) || 0;
       display.style.display = "none";
       input.style.display = "inline";
       input.focus();
     }
 
-    function saveAmount() {
-      const display = document.getElementById("customAmount");
-      const input = document.getElementById("customAmountInput");
+    function saveTipAmount() {
+      const display = document.getElementById("tipAmountDisplay");
+      const input = document.getElementById("tipAmountInput");
 
       let val = parseFloat(input.value);
-      if (!isNaN(val)) {
-        display.textContent = val + "$";
-      } else {
-        display.textContent = "0$";
-      }
-
+      display.textContent = isNaN(val) ? "0" : val.toString();
       display.style.display = "block";
       input.style.display = "none";
     }
   </script>
+</body>
+</html>
+
 </body>
 </html>
