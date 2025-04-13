@@ -32,6 +32,13 @@
       margin-bottom: 10px;
     }
 
+    .canvas-counter {
+      font-size: 48px; /* Larger font size for $counter */
+      font-weight: bold;
+      color: #333; /* Text color changed to dark gray */
+      margin-bottom: 30px;
+    }
+
     .tip-container {
       width: 400px;
       border: 1px solid #ccc;
@@ -133,13 +140,6 @@
       user-select: none;
     }
 
-    /* Enhance $counter appearance */
-    .counter {
-      font-size: 36px; /* Larger font size */
-      font-weight: bold;
-      margin-top: 15px; /* Slightly higher */
-    }
-
     /* Custom Button Style */
     .custom-tip {
       padding: 20px 0;
@@ -167,7 +167,10 @@
   </style>
 </head>
 <body>
+  <!-- Removed blue canvas here -->
+
   <div class="container">
+    <div class="canvas-counter" id="counterValue">$0.00</div>
     <div class="title">Would you like to leave a tip?</div>
 
     <div class="tip-container" id="tipScreen">
@@ -201,11 +204,6 @@
       </div>
 
       <div class="thank-you" id="thankYouMsg"></div>
-
-      <!-- Counter Display -->
-      <div class="counter">
-        <span id="counterValue">$0.00</span>
-      </div>
     </div>
 
     <div class="confetti-container" id="confettiContainer">
