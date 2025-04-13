@@ -35,7 +35,7 @@
     .canvas-counter {
       font-size: 48px; /* Larger font size for $counter */
       font-weight: bold;
-      color: #333; /* Text color changed to dark gray */
+      color: blue; /* Text color changed to blue */
       margin-bottom: 30px;
     }
 
@@ -183,7 +183,9 @@
   <!-- Removed blue canvas here -->
 
   <div class="container">
-    <div class="canvas-counter" id="counterValue">$0.00</div>
+    <div class="canvas-counter" id="counterValue">
+      <input type="number" id="counterInput" value="0" style="font-size: 48px; color: blue; background: transparent; border: none; text-align: center; width: 100%;" oninput="updateCounterValue(event)">
+    </div>
     <div class="title">Would you like to leave a tip?</div>
 
     <div class="tip-container" id="tipScreen">
@@ -237,11 +239,10 @@
       const counterValue = document.getElementById("counterValue");
 
       if (tipped) {
-        const amount = customAmount || 100; // Default to $100 if no custom amount
+        const amount = parseFloat(document.getElementById("counterInput").value) || 100; // Default to $100 if no custom amount
         const tip = amount * (percentage / 100);
         const total = amount + tip;
         counterValue.textContent = `$${total.toFixed(2)}`;
-        receiptOptions.style.display = "flex";
       } else {
         msg.textContent = "Maybe next time 😊";
         msg.style.display = "block";
@@ -259,6 +260,11 @@
       const input = document.getElementById("customAmount");
       customAmount = parseFloat(input.value) || 0;
       handleTip(true, 0); // Recalculate based on custom amount
+    }
+
+    function updateCounterValue(event) {
+      const counterValue = document.getElementById("counterValue");
+      counterValue.textContent = `$${parseFloat(event.target.value).toFixed(2)}`;
     }
 
     function showEmailForm() {
@@ -284,4 +290,3 @@
   </script>
 </body>
 </html>
-
