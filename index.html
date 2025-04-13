@@ -140,12 +140,15 @@
 
   <div class="tip-container" id="tipScreen">
     <div class="tip-options">
-      <button class="tip-option" onclick="handleTip(true)">15%</button>
-      <button class="tip-option" onclick="handleTip(true)">20%</button>
-      <button class="tip-option" onclick="handleTip(true)">30%</button>
+      <button class="tip-option" onclick="handleTip(15)">15%</button>
+      <button class="tip-option" onclick="handleTip(20)">20%</button>
+      <button class="tip-option" onclick="handleTip(30)">30%</button>
     </div>
 
-    <button class="no-tip" onclick="handleTip(false)">No Tip</button>
+    <!-- Input field for custom tip amount -->
+    <input type="number" id="customTipInput" placeholder="Enter custom amount" style="font-size: 18px; padding: 10px;" />
+
+    <button class="no-tip" onclick="handleTip(0)">No Tip</button>
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
@@ -175,7 +178,9 @@
 </div>
 
 <script>
-  function handleTip(tipped) {
+  let $counter = 0; // Default amount is 0
+
+  function handleTip(tipPercentage) {
     const msg = document.getElementById("thankYouMsg");
     const receiptOptions = document.getElementById("receiptOptions");
 
@@ -183,13 +188,17 @@
     document.getElementById("confettiContainer").style.display = "none";
     document.getElementById("emailForm").style.display = "none";
 
-    if (!tipped) {
+    if (tipPercentage === 0) {
       msg.textContent = "Maybe next time 😊";
       msg.style.display = "block";
-      // Show receipt options and confetti even when no tip is selected
       receiptOptions.style.display = "flex";
       document.getElementById("confettiContainer").style.display = "flex";
     } else {
+      const totalAmount = 24; // Assuming a fixed amount of 24 for calculation
+      const tipAmount = totalAmount * (tipPercentage / 100);
+      $counter = totalAmount + tipAmount;
+
+      document.getElementById("customTipInput").value = `$${$counter.toFixed(2)}`;
       receiptOptions.style.display = "flex";
     }
   }
