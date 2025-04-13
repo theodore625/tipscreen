@@ -35,7 +35,7 @@
     .canvas-counter {
       font-size: 48px; /* Larger font size for $counter */
       font-weight: bold;
-      color: blue; /* Text color changed to blue */
+      color: #007aff; /* Match the blue color used in buttons */
       margin-bottom: 30px;
     }
 
@@ -177,14 +177,19 @@
       margin-bottom: 10px; /* Add margin between buttons to prevent collision */
     }
 
+    /* Remove input arrows */
+    input[type="number"] {
+      -moz-appearance: textfield;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
   </style>
 </head>
 <body>
-  <!-- Removed blue canvas here -->
-
   <div class="container">
     <div class="canvas-counter" id="counterValue">
-      <input type="number" id="counterInput" value="0" style="font-size: 48px; color: blue; background: transparent; border: none; text-align: center; width: 100%;" oninput="updateCounterValue(event)">
+      <input type="number" id="counterInput" value="0" style="font-size: 48px; color: #007aff; background: transparent; border: none; text-align: center; width: 100%;" oninput="updateCounterValue(event)">
     </div>
     <div class="title">Would you like to leave a tip?</div>
 
