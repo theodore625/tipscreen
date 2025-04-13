@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Tip Screen</title>
   <style>
     body {
@@ -14,6 +14,17 @@
       align-items: center;
       height: 100vh;
       position: relative;
+    }
+
+    /* Hide number input spinners in most browsers */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
     }
 
     .container {
@@ -38,31 +49,6 @@
       padding: 20px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
       text-align: center;
-    }
-
-    .dollar-wrapper {
-      display: inline-flex;
-      align-items: center;
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #007aff;
-      border: none;
-      padding: 8px;
-      border-radius: 6px;
-      background-color: white;
-      cursor: text;
-    }
-
-    .dollar-input {
-      border: none;
-      outline: none;
-      width: 80px;
-      font-size: 24px;
-      font-weight: bold;
-      text-align: right;
-      color: #007aff;
-      background-color: transparent;
     }
 
     .tip-options {
@@ -117,6 +103,7 @@
       display: none;
       justify-content: center;
       align-items: center;
+      z-index: 10;
     }
 
     .confetti-gif {
@@ -158,106 +145,133 @@
       cursor: not-allowed;
       user-select: none;
     }
+
+    .counter-display {
+      font-size: 24px;
+      color: #007aff;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .counter-input {
+      font-size: 24px;
+      color: #007aff;
+      border: none;
+      outline: none;
+      text-align: center;
+      display: none;
+      background-color: white;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">Would you like to leave a tip?</div>
+<div class="container">
+  <div id="counterDisplay" class="counter-display" onclick="showCounterInput()">$0.00</div>
+  <input id="counterInput" class="counter-input" type="number" step="0.01" onblur="hideCounterInput()" />
 
-    <div class="tip-container" id="tipScreen">
+  <div class="title">Would you like to leave a tip?</div>
 
-      <div class="dollar-wrapper">
-        <span>$</span>
-        <input
-          id="amountInput"
-          class="dollar-input"
-          type="number"
-          min="0"
-          step="0.01"
-          value="0.00"
-          onfocus="showKeyboard()"
-          onblur="formatAmount()"
-        />
-      </div>
-
-      <div class="tip-options">
-        <button class="tip-option" onclick="handleTip(15)">15%</button>
-        <button class="tip-option" onclick="handleTip(20)">20%</button>
-        <button class="tip-option" onclick="handleTip(30)">30%</button>
-      </div>
-
-      <button class="no-tip" onclick="handleTip(0)">No Tip</button>
-
-      <div class="receipt-options" id="receiptOptions">
-        <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
-        <button class="receipt-btn" onclick="processReceipt('no')">No Receipt</button>
-        <button class="receipt-btn" onclick="showEmailForm()">Email Receipt</button>
-      </div>
-
-      <div class="email-form" id="emailForm">
-        <div class="email-inputs">
-          <input type="text" placeholder="name" id="emailName" />
-          <span>@</span>
-          <input type="text" placeholder="domain.com" id="emailDomain" />
-        </div>
-        <button class="submit-email-btn" onclick="processReceipt('email')">Submit</button>
-      </div>
-
-      <div class="thank-you" id="thankYouMsg"></div>
+  <div class="tip-container" id="tipScreen">
+    <div class="tip-options">
+      <button class="tip-option" onclick="handleTip(15)">15%</button>
+      <button class="tip-option" onclick="handleTip(20)">20%</button>
+      <button class="tip-option" onclick="handleTip(30)">30%</button>
     </div>
 
-    <div class="confetti-container" id="confettiContainer">
-      <img class="confetti-gif" src="confetti.gif" alt="Confetti GIF" />
+    <button class="no-tip" onclick="handleTip(0)">No Tip</button>
+
+    <div class="receipt-options" id="receiptOptions">
+      <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
+      <button class="receipt-btn" onclick="processReceipt('no')">No Receipt</button>
+      <button class="receipt-btn" onclick="showEmailForm()">Email Receipt</button>
     </div>
+
+    <div class="email-form" id="emailForm">
+      <div class="email-inputs">
+        <input type="text" placeholder="name" id="emailName" />
+        <span>@</span>
+        <input type="text" placeholder="domain.com" id="emailDomain" />
+      </div>
+      <button class="submit-email-btn" onclick="processReceipt('email')">Submit</button>
+    </div>
+
+    <div class="thank-you" id="thankYouMsg"></div>
   </div>
 
-  <div class="fake-pay-buttons">
-    <img src="applepay-googlepay.png" alt="Apple Pay and Google Pay" />
+  <div class="confetti-container" id="confettiContainer">
+    <img class="confetti-gif" src="confetti.gif" alt="Confetti GIF">
   </div>
+</div>
 
-  <script>
-    function handleTip(percent) {
-      const input = document.getElementById("amountInput");
-      let current = parseFloat(input.value);
-      if (isNaN(current)) current = 0;
+<div class="fake-pay-buttons">
+  <img src="applepay-googlepay.png" alt="Apple Pay and Google Pay">
+</div>
 
-      const newTotal = percent ? (current + current * percent / 100).toFixed(2) : current.toFixed(2);
-      input.value = newTotal;
+<script>
+  let counter = 0;
 
-      document.getElementById("receiptOptions").style.display = "flex";
+  function updateCounterDisplay() {
+    document.getElementById("counterDisplay").textContent = `$${counter.toFixed(2)}`;
+    document.getElementById("counterInput").value = counter.toFixed(2);
+  }
+
+  function showCounterInput() {
+    document.getElementById("counterDisplay").style.display = "none";
+    const input = document.getElementById("counterInput");
+    input.style.display = "inline";
+    input.focus();
+    input.select();
+  }
+
+  function hideCounterInput() {
+    const input = document.getElementById("counterInput");
+    const newValue = parseFloat(input.value);
+    if (!isNaN(newValue)) {
+      counter = newValue;
     }
+    updateCounterDisplay();
+    input.style.display = "none";
+    document.getElementById("counterDisplay").style.display = "block";
+  }
 
-    function showEmailForm() {
-      document.getElementById("receiptOptions").style.display = "none";
-      document.getElementById("emailForm").style.display = "flex";
+  function handleTip(percentage) {
+    const msg = document.getElementById("thankYouMsg");
+    const receiptOptions = document.getElementById("receiptOptions");
+
+    msg.style.display = "none";
+    document.getElementById("emailForm").style.display = "none";
+    document.getElementById("confettiContainer").style.display = "none";
+
+    if (percentage === 0) {
+      receiptOptions.style.display = "flex";
+    } else {
+      const baseAmount = 20; // Simulated base
+      counter = baseAmount + (baseAmount * (percentage / 100));
+      updateCounterDisplay();
+      receiptOptions.style.display = "flex";
     }
+  }
 
-    function processReceipt(type) {
-      document.getElementById("thankYouMsg").textContent = "";
-      document.getElementById("thankYouMsg").style.display = "none";
-      document.getElementById("confettiContainer").style.display = "none";
+  function showEmailForm() {
+    document.getElementById("receiptOptions").style.display = "none";
+    document.getElementById("emailForm").style.display = "flex";
+  }
 
-      setTimeout(() => {
-        document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
-        document.getElementById("thankYouMsg").style.display = "block";
-        document.getElementById("confettiContainer").style.display = "flex";
-      }, 2000);
-    }
+  function processReceipt(type) {
+    const receiptOptions = document.getElementById("receiptOptions");
+    const emailForm = document.getElementById("emailForm");
 
-    function showKeyboard() {
-      const input = document.getElementById("amountInput");
-      input.select();
-    }
+    setTimeout(() => {
+      document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
+      document.getElementById("thankYouMsg").style.display = "block";
+      document.getElementById("confettiContainer").style.display = "flex";
 
-    function formatAmount() {
-      const input = document.getElementById("amountInput");
-      let value = parseFloat(input.value);
-      if (isNaN(value) || value < 0) {
-        input.value = "0.00";
-      } else {
-        input.value = value.toFixed(2);
-      }
-    }
-  </script>
+      // Don't hide everything now
+    }, 2000);
+  }
+
+  // Initialize display
+  updateCounterDisplay();
+</script>
 </body>
 </html>
