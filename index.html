@@ -16,17 +16,6 @@
       position: relative;
     }
 
-    /* Hide number input spinners in most browsers */
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .container {
       display: flex;
       flex-direction: column;
@@ -43,6 +32,13 @@
       margin-bottom: 10px;
     }
 
+    .counter-container {
+      font-size: 26px;
+      font-weight: bold;
+      color: #007aff;
+      margin-bottom: 10px;
+    }
+
     .tip-container {
       width: 400px;
       border: 1px solid #ccc;
@@ -54,11 +50,12 @@
     .tip-options {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       gap: 15px;
     }
 
     .tip-option,
+    .custom-btn,
     .no-tip,
     .receipt-btn,
     .submit-email-btn {
@@ -72,19 +69,31 @@
       cursor: pointer;
       user-select: none;
       transition: background-color 0.2s;
-      border-radius: 0;
     }
 
     .tip-option:hover,
+    .custom-btn:hover,
     .no-tip:hover,
     .receipt-btn:hover,
     .submit-email-btn:hover {
       background-color: #005bb5;
     }
 
+    .custom-tip-input {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .custom-tip-input input {
+      font-size: 16px;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+
     .no-tip {
       width: 100%;
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
     .thank-you {
@@ -103,7 +112,7 @@
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 10;
+      z-index: 99;
     }
 
     .confetti-gif {
@@ -145,40 +154,27 @@
       cursor: not-allowed;
       user-select: none;
     }
-
-    .counter-display {
-      font-size: 24px;
-      color: #007aff;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .counter-input {
-      font-size: 24px;
-      color: #007aff;
-      border: none;
-      outline: none;
-      text-align: center;
-      display: none;
-      background-color: white;
-    }
   </style>
 </head>
 <body>
 <div class="container">
-  <div id="counterDisplay" class="counter-display" onclick="showCounterInput()">$0.00</div>
-  <input id="counterInput" class="counter-input" type="number" step="0.01" onblur="hideCounterInput()" />
-
+  <div class="counter-container" id="counterDisplay">$0.00</div>
   <div class="title">Would you like to leave a tip?</div>
 
   <div class="tip-container" id="tipScreen">
     <div class="tip-options">
-      <button class="tip-option" onclick="handleTip(15)">15%</button>
-      <button class="tip-option" onclick="handleTip(20)">20%</button>
-      <button class="tip-option" onclick="handleTip(30)">30%</button>
+      <button class="tip-option" onclick="applyTip(0.15)">15%</button>
+      <button class="tip-option" onclick="applyTip(0.20)">20%</button>
+      <button class="tip-option" onclick="applyTip(0.30)">30%</button>
     </div>
 
-    <button class="no-tip" onclick="handleTip(0)">No Tip</button>
+    <button class="custom-btn" onclick="showCustomTip()">Custom</button>
+
+    <div class="custom-tip-input" id="customInputBox">
+      <input type="number" placeholder="Enter tip amount" id="customTipInput" onblur="submitCustomTip()" />
+    </div>
+
+    <button class="no-tip" onclick="handleTip(false)">No Tip</button>
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
@@ -208,48 +204,45 @@
 </div>
 
 <script>
-  let counter = 0;
+  let tipAmount = 0;
 
   function updateCounterDisplay() {
-    document.getElementById("counterDisplay").textContent = `$${counter.toFixed(2)}`;
-    document.getElementById("counterInput").value = counter.toFixed(2);
+    document.getElementById("counterDisplay").textContent = "$" + tipAmount.toFixed(2);
   }
 
-  function showCounterInput() {
-    document.getElementById("counterDisplay").style.display = "none";
-    const input = document.getElementById("counterInput");
-    input.style.display = "inline";
-    input.focus();
-    input.select();
-  }
-
-  function hideCounterInput() {
-    const input = document.getElementById("counterInput");
-    const newValue = parseFloat(input.value);
-    if (!isNaN(newValue)) {
-      counter = newValue;
-    }
+  function applyTip(percent) {
+    // use base $20 for simulation
+    tipAmount = 20 + (20 * percent);
     updateCounterDisplay();
-    input.style.display = "none";
-    document.getElementById("counterDisplay").style.display = "block";
+    handleTip(true);
   }
 
-  function handleTip(percentage) {
+  function showCustomTip() {
+    document.getElementById("customInputBox").style.display = "block";
+    const input = document.getElementById("customTipInput");
+    input.focus();
+  }
+
+  function submitCustomTip() {
+    const inputVal = parseFloat(document.getElementById("customTipInput").value);
+    if (!isNaN(inputVal)) {
+      tipAmount = inputVal;
+      updateCounterDisplay();
+      document.getElementById("customInputBox").style.display = "none";
+      handleTip(true);
+    }
+  }
+
+  function handleTip(tipped) {
     const msg = document.getElementById("thankYouMsg");
     const receiptOptions = document.getElementById("receiptOptions");
+    const emailForm = document.getElementById("emailForm");
 
     msg.style.display = "none";
-    document.getElementById("emailForm").style.display = "none";
     document.getElementById("confettiContainer").style.display = "none";
+    emailForm.style.display = "none";
 
-    if (percentage === 0) {
-      receiptOptions.style.display = "flex";
-    } else {
-      const baseAmount = 20; // Simulated base
-      counter = baseAmount + (baseAmount * (percentage / 100));
-      updateCounterDisplay();
-      receiptOptions.style.display = "flex";
-    }
+    receiptOptions.style.display = "flex";
   }
 
   function showEmailForm() {
@@ -266,12 +259,10 @@
       document.getElementById("thankYouMsg").style.display = "block";
       document.getElementById("confettiContainer").style.display = "flex";
 
-      // Don't hide everything now
+      receiptOptions.style.display = "none";
+      emailForm.style.display = "none";
     }, 2000);
   }
-
-  // Initialize display
-  updateCounterDisplay();
 </script>
 </body>
 </html>
