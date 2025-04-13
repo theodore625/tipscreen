@@ -45,12 +45,15 @@
       padding: 20px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .tip-options {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 30px;
+      margin-bottom: 15px;
       gap: 15px;
     }
 
@@ -164,6 +167,16 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
+
+    /* New Layout Fix for Buttons */
+    .tip-options, .no-tip, .custom-tip {
+      width: 100%; /* Ensure the buttons stretch fully */
+    }
+
+    .tip-options button, .no-tip, .custom-tip {
+      margin-bottom: 10px; /* Add margin between buttons to prevent collision */
+    }
+
   </style>
 </head>
 <body>
@@ -271,3 +284,4 @@
   </script>
 </body>
 </html>
+
