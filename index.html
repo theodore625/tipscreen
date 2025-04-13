@@ -154,11 +154,26 @@
       cursor: not-allowed;
       user-select: none;
     }
+
+    /* Remove arrows from the input field */
+    .counter-container input::-webkit-outer-spin-button,
+    .counter-container input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .counter-container input[type=number] {
+      -moz-appearance: textfield;
+    }
+
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="counter-container" id="counterDisplay">$0.00</div>
+  <div class="counter-container">
+    <input type="number" id="counterInput" value="0" onchange="updateCounterDisplay()" />
+    <span>$</span>
+  </div>
   <div class="title">Would you like to leave a tip?</div>
 
   <div class="tip-container" id="tipScreen">
@@ -207,12 +222,13 @@
   let tipAmount = 0;
 
   function updateCounterDisplay() {
-    document.getElementById("counterDisplay").textContent = "$" + tipAmount.toFixed(2);
+    tipAmount = parseFloat(document.getElementById("counterInput").value) || 0;
+    document.getElementById("counterInput").value = tipAmount.toFixed(2);
   }
 
   function applyTip(percent) {
-    // Use base $20 for simulation
-    tipAmount = 20 + (20 * percent);
+    const baseAmount = parseFloat(document.getElementById("counterInput").value) || 0;
+    tipAmount = baseAmount + (baseAmount * percent);
     updateCounterDisplay();
     handleTip(true);
   }
