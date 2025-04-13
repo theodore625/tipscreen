@@ -50,13 +50,14 @@
       border: none;
       padding: 8px;
       border-radius: 6px;
-      cursor: pointer;
+      background-color: white;
+      cursor: text;
     }
 
     .dollar-input {
       border: none;
       outline: none;
-      width: 60px;
+      width: 80px;
       font-size: 24px;
       font-weight: bold;
       text-align: right;
@@ -165,9 +166,18 @@
 
     <div class="tip-container" id="tipScreen">
 
-      <div class="dollar-wrapper" onclick="enableEdit()">
+      <div class="dollar-wrapper">
         <span>$</span>
-        <input id="amountInput" class="dollar-input" value="0.00" readonly />
+        <input
+          id="amountInput"
+          class="dollar-input"
+          type="number"
+          min="0"
+          step="0.01"
+          value="0.00"
+          onfocus="showKeyboard()"
+          onblur="formatAmount()"
+        />
       </div>
 
       <div class="tip-options">
@@ -208,8 +218,10 @@
   <script>
     function handleTip(percent) {
       const input = document.getElementById("amountInput");
-      const current = parseFloat(input.value) || 0;
-      const newTotal = percent ? (current + (current * percent / 100)).toFixed(2) : current.toFixed(2);
+      let current = parseFloat(input.value);
+      if (isNaN(current)) current = 0;
+
+      const newTotal = percent ? (current + current * percent / 100).toFixed(2) : current.toFixed(2);
       input.value = newTotal;
 
       document.getElementById("receiptOptions").style.display = "flex";
@@ -232,16 +244,19 @@
       }, 2000);
     }
 
-    function enableEdit() {
+    function showKeyboard() {
       const input = document.getElementById("amountInput");
-      input.readOnly = false;
-      input.focus();
       input.select();
+    }
 
-      input.addEventListener("blur", () => {
-        if (input.value.trim() === "") input.value = "0.00";
-        input.readOnly = true;
-      }, { once: true });
+    function formatAmount() {
+      const input = document.getElementById("amountInput");
+      let value = parseFloat(input.value);
+      if (isNaN(value) || value < 0) {
+        input.value = "0.00";
+      } else {
+        input.value = value.toFixed(2);
+      }
     }
   </script>
 </body>
