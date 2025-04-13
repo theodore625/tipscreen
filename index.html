@@ -27,20 +27,22 @@
       padding: 10px;
       border-radius: 6px;
       max-width: 200px;
+      cursor: pointer;
     }
 
-    .dollar-wrapper span {
-      margin-right: 5px;
+    #displayAmount {
       color: #007aff;
     }
 
     #customTipInput {
+      display: none;
       border: none;
       outline: none;
       font-size: 24px;
       flex: 1;
       color: #007aff;
       background: transparent;
+      width: 100%;
     }
 
     .title {
@@ -125,15 +127,16 @@
 </head>
 <body>
 
-  <div class="dollar-wrapper">
+  <div class="dollar-wrapper" onclick="showInput()">
     <span>$</span>
+    <span id="displayAmount">0.00</span>
     <input 
       id="customTipInput" 
       type="number" 
       inputmode="decimal" 
       value="0" 
+      onblur="hideInput()" 
       oninput="updateCounter(this.value)" 
-      onblur="finalizeCounter(this.value)"
     />
   </div>
 
@@ -174,11 +177,24 @@
 
     function updateCounter(value) {
       $counter = parseFloat(value) || 0;
+      document.getElementById("displayAmount").textContent = $counter.toFixed(2);
     }
 
-    function finalizeCounter(value) {
-      $counter = parseFloat(value) || 0;
-      document.getElementById("customTipInput").value = $counter.toFixed(2);
+    function showInput() {
+      const input = document.getElementById("customTipInput");
+      const display = document.getElementById("displayAmount");
+
+      input.style.display = "inline";
+      input.focus();
+      display.style.display = "none";
+    }
+
+    function hideInput() {
+      const input = document.getElementById("customTipInput");
+      const display = document.getElementById("displayAmount");
+
+      input.style.display = "none";
+      display.style.display = "inline";
     }
 
     function handleTip(tipPercent) {
@@ -193,6 +209,7 @@
 
       $counter = total;
       document.getElementById("customTipInput").value = total.toFixed(2);
+      document.getElementById("displayAmount").textContent = total.toFixed(2);
       document.getElementById("thankYouMsg").textContent = total === 0 
         ? "No tip added 💸" 
         : `You paid $${total.toFixed(2)} 🎉`;
@@ -217,4 +234,3 @@
 
 </body>
 </html>
-
