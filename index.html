@@ -155,12 +155,24 @@
       cursor: not-allowed;
       user-select: none;
     }
+
+    /* Remove the number input spinner */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="counter-container">
     <input type="number" id="counterText" value="0.00" onchange="updateCounter()" style="font-size: 26px; font-weight: bold; color: #007aff; text-align: center; width: 100px; border: none; outline: none; background: transparent;">
+    <span style="font-size: 26px; font-weight: bold; color: #007aff;">$</span>
   </div>
   <div class="title">Would you like to leave a tip?</div>
 
@@ -273,3 +285,4 @@
 </script>
 </body>
 </html>
+
