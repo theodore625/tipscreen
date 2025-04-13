@@ -79,9 +79,9 @@
       background-color: #005bb5;
     }
 
-    /* Custom button with square edges */
+    /* Custom button with square edges (same as no-tip button) */
     .custom-btn {
-      border-radius: 0; /* Square edges for Custom button */
+      width: 100%; /* Same width as no-tip */
     }
 
     .custom-tip-input {
@@ -187,6 +187,7 @@
       <button class="tip-option" onclick="applyTip(0.30)">30%</button>
     </div>
 
+    <!-- Custom button with rectangle style same as "No Tip" -->
     <button class="custom-btn" onclick="showCustomTip()">Custom</button>
 
     <div class="custom-tip-input" id="customInputBox">
@@ -289,3 +290,4 @@
 </script>
 </body>
 </html>
+
