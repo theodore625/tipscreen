@@ -237,16 +237,22 @@
 
   <script>
     let customAmount = 0;
+    let baseAmount = 0;
 
+    // Function to handle tip percentage calculations
     function handleTip(tipped, percentage = 0) {
       const msg = document.getElementById("thankYouMsg");
       const receiptOptions = document.getElementById("receiptOptions");
       const counterValue = document.getElementById("counterValue");
 
+      // Get the current amount in the counter input field
+      const amount = parseFloat(document.getElementById("counterInput").value) || 0;
+      baseAmount = amount;
+
       if (tipped) {
-        const amount = parseFloat(document.getElementById("counterInput").value) || 100; // Default to $100 if no custom amount
-        const tip = amount * (percentage / 100);
-        const total = amount + tip;
+        // Calculate the tip based on the base amount + custom tip
+        const tip = (baseAmount + customAmount) * (percentage / 100);
+        const total = baseAmount + customAmount + tip;
         counterValue.textContent = `$${total.toFixed(2)}`;
       } else {
         msg.textContent = "Maybe next time 😊";
@@ -256,35 +262,37 @@
       }
     }
 
+    // Toggle custom input for the user to enter their own tip amount
     function toggleCustomInput() {
       const customInput = document.querySelector(".custom-input");
       customInput.style.display = customInput.style.display === "none" ? "block" : "none";
     }
 
+    // Update the custom tip amount
     function updateCustomAmount() {
       const input = document.getElementById("customAmount");
       customAmount = parseFloat(input.value) || 0;
 
-      // Ensure customAmount is added to the base amount
-      const amount = parseFloat(document.getElementById("counterInput").value) || 100; // Default to $100 if empty
-      const total = amount + customAmount;
-
-      // Update counter
+      // Recalculate the total with custom tip and base amount
+      const total = baseAmount + customAmount;
       document.getElementById("counterValue").textContent = `$${total.toFixed(2)}`;
     }
 
+    // Update counter value when the user modifies the base amount
     function updateCounterValue(event) {
       const counterValue = document.getElementById("counterValue");
-      const baseAmount = parseFloat(event.target.value) || 100;
+      baseAmount = parseFloat(event.target.value) || 0;
       const total = baseAmount + customAmount;
       counterValue.textContent = `$${total.toFixed(2)}`;
     }
 
+    // Show email form for receipt
     function showEmailForm() {
       document.getElementById("receiptOptions").style.display = "none";
       document.getElementById("emailForm").style.display = "flex";
     }
 
+    // Process the receipt
     function processReceipt(type) {
       const receiptOptions = document.getElementById("receiptOptions");
       const emailForm = document.getElementById("emailForm");
