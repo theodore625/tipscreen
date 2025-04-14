@@ -264,12 +264,20 @@
     function updateCustomAmount() {
       const input = document.getElementById("customAmount");
       customAmount = parseFloat(input.value) || 0;
-      handleTip(true, 0); // Recalculate based on custom amount
+
+      // Ensure customAmount is added to the base amount
+      const amount = parseFloat(document.getElementById("counterInput").value) || 100; // Default to $100 if empty
+      const total = amount + customAmount;
+
+      // Update counter
+      document.getElementById("counterValue").textContent = `$${total.toFixed(2)}`;
     }
 
     function updateCounterValue(event) {
       const counterValue = document.getElementById("counterValue");
-      counterValue.textContent = `$${parseFloat(event.target.value).toFixed(2)}`;
+      const baseAmount = parseFloat(event.target.value) || 100;
+      const total = baseAmount + customAmount;
+      counterValue.textContent = `$${total.toFixed(2)}`;
     }
 
     function showEmailForm() {
