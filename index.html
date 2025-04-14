@@ -1,30 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tip Screen</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
+      background-color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding-top: 60px;
+    }
+
+    .amount-display {
+      font-size: 32px;
+      color: #007aff;
+      font-weight: bold;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    #counterInput {
+      font-size: 32px;
+      color: #007aff;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100px;
+      text-align: center;
+      display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
     }
 
     .title {
-      font-size: 28px;
-      font-weight: bold;
+      font-size: 24px;
       margin-bottom: 20px;
     }
 
     .tip-container {
-      width: 400px;
-      padding: 20px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      width: 320px;
       text-align: center;
     }
 
@@ -34,19 +60,20 @@
       margin-bottom: 10px;
     }
 
-    .tip-option, .no-tip, .custom-tip {
+    .tip-option,
+    .custom-tip,
+    .no-tip {
       flex: 1;
-      padding: 15px;
+      padding: 12px;
       background-color: #007aff;
       color: white;
       font-size: 16px;
+      font-weight: bold;
       border: none;
       cursor: pointer;
-      font-weight: bold;
     }
 
     .custom-tip {
-      margin-top: 10px;
       width: 100%;
     }
 
@@ -55,14 +82,14 @@
       margin-top: 10px;
     }
 
-    .receipt-options, .email-form {
+    .receipt-options,
+    .email-form {
       display: none;
-      flex-direction: column;
-      gap: 10px;
       margin-top: 20px;
     }
 
-    .receipt-btn, .submit-email-btn {
+    .receipt-btn,
+    .submit-email-btn {
       padding: 12px;
       background-color: #007aff;
       color: white;
@@ -70,6 +97,8 @@
       border: none;
       cursor: pointer;
       font-weight: bold;
+      margin-bottom: 10px;
+      width: 100%;
     }
 
     .email-inputs {
@@ -96,6 +125,7 @@
       top: 0; left: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
     }
 
     .confetti-container img {
@@ -103,41 +133,12 @@
       height: 100%;
       object-fit: cover;
     }
-
-    .counter-wrapper {
-      margin: 20px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 26px;
-      font-weight: bold;
-      color: #007aff;
-    }
-
-    #counter {
-      font-size: 26px;
-      font-weight: bold;
-      border: none;
-      border-bottom: 2px solid #007aff;
-      width: 80px;
-      text-align: right;
-      color: #007aff;
-      background-color: transparent;
-    }
-
-    /* Remove spinner arrows */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type=number] {
-      -moz-appearance: textfield;
-    }
   </style>
 </head>
 <body>
+
+  <div class="amount-display" id="displayAmount" onclick="editCounter()">$0.00</div>
+  <input type="text" id="counterInput" onblur="saveCounter()" />
 
   <div class="title">Would you like to leave a tip?</div>
 
@@ -148,12 +149,8 @@
       <button class="tip-option" onclick="handleTip(0.30)">30%</button>
     </div>
 
-    <button class="custom-tip" onclick="showCustomTipInput()">Custom Tip</button>
+    <button class="custom-tip" onclick="showCustomTipInput()">Custom</button>
     <button class="no-tip" onclick="handleTip(0)">No Tip</button>
-
-    <div class="counter-wrapper">
-      <input type="text" id="counter" value="0.00">$
-    </div>
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
@@ -178,19 +175,41 @@
   </div>
 
   <script>
-    let $counter = 0;
+    let currentAmount = 0.00;
 
-    function handleTip(tipPercent) {
-      const baseAmount = parseFloat(document.getElementById("counter").value) || 0;
-      const tipAmount = baseAmount * tipPercent;
-      const total = baseAmount + tipAmount;
-      document.getElementById("counter").value = total.toFixed(2);
+    function updateDisplay() {
+      document.getElementById('displayAmount').textContent = `$${currentAmount.toFixed(2)}`;
+    }
 
-      document.getElementById("receiptOptions").style.display = "flex";
+    function editCounter() {
+      const input = document.getElementById('counterInput');
+      const display = document.getElementById('displayAmount');
+      input.style.display = 'inline';
+      display.style.display = 'none';
+      input.value = currentAmount.toFixed(2);
+      input.focus();
+    }
+
+    function saveCounter() {
+      const input = document.getElementById('counterInput');
+      const display = document.getElementById('displayAmount');
+      let val = parseFloat(input.value);
+      currentAmount = isNaN(val) ? 0 : val;
+      input.style.display = 'none';
+      display.style.display = 'inline';
+      updateDisplay();
+    }
+
+    function handleTip(percent) {
+      const tip = currentAmount * percent;
+      currentAmount += tip;
+      updateDisplay();
+
+      document.getElementById("receiptOptions").style.display = "block";
       document.getElementById("thankYouMsg").style.display = "none";
       document.getElementById("confettiContainer").style.display = "none";
 
-      if (tipPercent === 0) {
+      if (percent === 0) {
         document.getElementById("thankYouMsg").textContent = "Maybe next time 😊";
         document.getElementById("thankYouMsg").style.display = "block";
         document.getElementById("confettiContainer").style.display = "flex";
@@ -200,14 +219,15 @@
     function showCustomTipInput() {
       const custom = prompt("Enter your custom tip amount:");
       if (custom && !isNaN(custom)) {
-        document.getElementById("counter").value = parseFloat(custom).toFixed(2);
-        document.getElementById("receiptOptions").style.display = "flex";
+        currentAmount += parseFloat(custom);
+        updateDisplay();
+        document.getElementById("receiptOptions").style.display = "block";
       }
     }
 
     function showEmailForm() {
       document.getElementById("receiptOptions").style.display = "none";
-      document.getElementById("emailForm").style.display = "flex";
+      document.getElementById("emailForm").style.display = "block";
     }
 
     function processReceipt(type) {
