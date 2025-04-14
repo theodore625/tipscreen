@@ -13,28 +13,16 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      position: relative;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 70%;
     }
 
     .title {
       font-size: 28px;
       font-weight: bold;
-      color: #333;
-      text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
     .tip-container {
       width: 400px;
-      border: 1px solid #ccc;
       padding: 20px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
       text-align: center;
@@ -42,40 +30,57 @@
 
     .tip-options {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      gap: 15px;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
-    .tip-option,
-    .no-tip,
-    .custom-tip,
-    .receipt-btn,
-    .submit-email-btn {
+    .tip-option, .no-tip, .custom-tip {
       flex: 1;
-      padding: 20px 0;
+      padding: 15px;
       background-color: #007aff;
       color: white;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 16px;
       border: none;
       cursor: pointer;
-      user-select: none;
-      transition: background-color 0.2s;
+      font-weight: bold;
     }
 
-    .tip-option:hover,
-    .no-tip:hover,
-    .custom-tip:hover,
-    .receipt-btn:hover,
-    .submit-email-btn:hover {
-      background-color: #005bb5;
-    }
-
-    .no-tip,
     .custom-tip {
+      margin-top: 10px;
       width: 100%;
-      margin-top: 15px;
+    }
+
+    .no-tip {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .receipt-options, .email-form {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .receipt-btn, .submit-email-btn {
+      padding: 12px;
+      background-color: #007aff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .email-inputs {
+      display: flex;
+      gap: 5px;
+    }
+
+    .email-inputs input {
+      padding: 8px;
+      font-size: 14px;
+      flex: 1;
     }
 
     .thank-you {
@@ -86,94 +91,69 @@
     }
 
     .confetti-container {
+      display: none;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
-      display: none;
-      justify-content: center;
-      align-items: center;
     }
 
-    .confetti-gif {
+    .confetti-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .receipt-options, .email-form {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .email-inputs {
+    .counter-wrapper {
+      margin: 20px 0;
       display: flex;
-      gap: 5px;
-    }
-
-    .email-inputs input {
-      font-size: 16px;
-      padding: 8px;
-      width: 100%;
-    }
-
-    .fake-pay-buttons {
-      position: fixed;
-      bottom: 10px;
-      display: flex;
-      gap: 10px;
       justify-content: center;
-      width: 100%;
-    }
-
-    .fake-pay-buttons img {
-      height: 60px;
-      opacity: 0.7;
-      cursor: not-allowed;
-      user-select: none;
-    }
-
-    /* Style for the $counter input */
-    #counter {
-      font-size: 28px;
+      align-items: center;
+      font-size: 26px;
       font-weight: bold;
-      color: #007aff; /* Blue color for the $counter */
-      border: none;
-      background: transparent;
-      width: 80px;
-      text-align: center;
+      color: #007aff;
     }
 
-    /* Remove spinner from number input */
-    #counter::-webkit-outer-spin-button,
-    #counter::-webkit-inner-spin-button {
+    #counter {
+      font-size: 26px;
+      font-weight: bold;
+      border: none;
+      border-bottom: 2px solid #007aff;
+      width: 80px;
+      text-align: right;
+      color: #007aff;
+      background-color: transparent;
+    }
+
+    /* Remove spinner arrows */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
 
-    #counter[type="number"] {
+    input[type=number] {
       -moz-appearance: textfield;
     }
   </style>
 </head>
 <body>
-<div class="container">
+
   <div class="title">Would you like to leave a tip?</div>
 
-  <div class="tip-container" id="tipScreen">
+  <div class="tip-container">
     <div class="tip-options">
       <button class="tip-option" onclick="handleTip(0.15)">15%</button>
       <button class="tip-option" onclick="handleTip(0.20)">20%</button>
       <button class="tip-option" onclick="handleTip(0.30)">30%</button>
     </div>
 
+    <button class="custom-tip" onclick="showCustomTipInput()">Custom Tip</button>
     <button class="no-tip" onclick="handleTip(0)">No Tip</button>
 
-    <!-- Custom Tip input -->
-    <button class="custom-tip" onclick="showCustomTipInput()">Custom Tip</button>
+    <div class="counter-wrapper">
+      <input type="text" id="counter" value="0.00">$
+    </div>
 
     <div class="receipt-options" id="receiptOptions">
       <div style="font-size:18px; margin-bottom:10px;">Print a receipt?</div>
@@ -183,9 +163,9 @@
 
     <div class="email-form" id="emailForm">
       <div class="email-inputs">
-        <input type="text" placeholder="name" id="emailName" />
+        <input type="text" placeholder="name" id="emailName">
         <span>@</span>
-        <input type="text" placeholder="domain.com" id="emailDomain" />
+        <input type="text" placeholder="domain.com" id="emailDomain">
       </div>
       <button class="submit-email-btn" onclick="processReceipt('email')">Submit</button>
     </div>
@@ -194,68 +174,52 @@
   </div>
 
   <div class="confetti-container" id="confettiContainer">
-    <img class="confetti-gif" src="confetti.gif" alt="Confetti GIF">
+    <img src="confetti.gif" alt="Confetti">
   </div>
-</div>
 
-<div class="fake-pay-buttons">
-  <img src="applepay-googlepay.png" alt="Apple Pay and Google Pay">
-</div>
+  <script>
+    let $counter = 0;
 
-<script>
-  let $counter = 0;
+    function handleTip(tipPercent) {
+      const baseAmount = parseFloat(document.getElementById("counter").value) || 0;
+      const tipAmount = baseAmount * tipPercent;
+      const total = baseAmount + tipAmount;
+      document.getElementById("counter").value = total.toFixed(2);
 
-  function handleTip(tipPercentage) {
-    const msg = document.getElementById("thankYouMsg");
-    const receiptOptions = document.getElementById("receiptOptions");
+      document.getElementById("receiptOptions").style.display = "flex";
+      document.getElementById("thankYouMsg").style.display = "none";
+      document.getElementById("confettiContainer").style.display = "none";
 
-    // Update the $counter based on the tip percentage
-    $counter = (100 + (tipPercentage * 100));
-
-    // Update the $counter display
-    document.getElementById("counter").value = `$${$counter.toFixed(2)}`;
-
-    msg.style.display = "none";
-    document.getElementById("confettiContainer").style.display = "none";
-    document.getElementById("emailForm").style.display = "none";
-
-    if (tipPercentage === 0) {
-      msg.textContent = "Maybe next time 😊";
-      msg.style.display = "block";
-      return; // Do not show receipt options if no tip
-    } else {
-      receiptOptions.style.display = "flex";
+      if (tipPercent === 0) {
+        document.getElementById("thankYouMsg").textContent = "Maybe next time 😊";
+        document.getElementById("thankYouMsg").style.display = "block";
+        document.getElementById("confettiContainer").style.display = "flex";
+      }
     }
-  }
 
-  function showCustomTipInput() {
-    const customTip = prompt("Enter a custom tip amount ($):");
-    if (customTip) {
-      $counter = parseFloat(customTip);
-      document.getElementById("counter").value = `$${$counter.toFixed(2)}`;
+    function showCustomTipInput() {
+      const custom = prompt("Enter your custom tip amount:");
+      if (custom && !isNaN(custom)) {
+        document.getElementById("counter").value = parseFloat(custom).toFixed(2);
+        document.getElementById("receiptOptions").style.display = "flex";
+      }
     }
-  }
 
-  function showEmailForm() {
-    document.getElementById("receiptOptions").style.display = "none";
-    document.getElementById("emailForm").style.display = "flex";
-  }
+    function showEmailForm() {
+      document.getElementById("receiptOptions").style.display = "none";
+      document.getElementById("emailForm").style.display = "flex";
+    }
 
-  function processReceipt(type) {
-    const receiptOptions = document.getElementById("receiptOptions");
-    const emailForm = document.getElementById("emailForm");
+    function processReceipt(type) {
+      setTimeout(() => {
+        document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
+        document.getElementById("thankYouMsg").style.display = "block";
+        document.getElementById("confettiContainer").style.display = "flex";
+        document.getElementById("receiptOptions").style.display = "none";
+        document.getElementById("emailForm").style.display = "none";
+      }, 1500);
+    }
+  </script>
 
-    // Simulate a delay before showing transaction complete
-    setTimeout(() => {
-      document.getElementById("thankYouMsg").textContent = "Transaction Complete ✅";
-      document.getElementById("thankYouMsg").style.display = "block";
-      document.getElementById("confettiContainer").style.display = "flex";
-      
-      // Hide the receipt options and email form
-      receiptOptions.style.display = "none";
-      emailForm.style.display = "none";
-    }, 2000);
-  }
-</script>
 </body>
 </html>
